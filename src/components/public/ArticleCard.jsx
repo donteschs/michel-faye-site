@@ -15,6 +15,10 @@ export default function ArticleCard({ article }) {
   return (
     <article
       onClick={() => navigate('article', article)}
+      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && navigate('article', article)}
+      tabIndex={0}
+      role="button"
+      aria-label={`Lire l'article : ${article.title}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{

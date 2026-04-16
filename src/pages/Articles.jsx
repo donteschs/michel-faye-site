@@ -10,8 +10,12 @@ export default function Articles() {
   const [activeCategory, setActiveCategory] = useState('Tous');
 
   useEffect(() => {
+    let cancelled = false;
     supabase.from('articles').select('*').eq('status', 'published').order('date', { ascending: false })
-      .then(({ data }) => { setArticles(data || []); setLoading(false); });
+      .then(({ data }) => {
+        if (!cancelled) { setArticles(data || []); setLoading(false); }
+      });
+    return () => { cancelled = true; };
   }, []);
 
   const filtered = activeCategory === 'Tous' ? articles : articles.filter(a => a.category === activeCategory);
@@ -30,6 +34,7 @@ export default function Articles() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
+              aria-pressed={activeCategory === cat}
               style={{
                 background: active ? 'var(--blue)' : 'var(--white)',
                 color: active ? 'var(--white)' : 'var(--ink-light)',

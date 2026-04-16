@@ -46,6 +46,7 @@ export default function ArticleDetail() {
       `}</style>
 
       <button
+        type="button"
         onClick={() => navigate('articles')}
         style={{
           background: 'transparent', border: 'none', color: 'var(--ink-light)',
@@ -53,7 +54,7 @@ export default function ArticleDetail() {
           padding: 0, marginBottom: 32, display: 'flex', alignItems: 'center', gap: 6,
         }}
       >
-        ← Retour aux écrits
+        <span aria-hidden="true">←</span> Retour aux écrits
       </button>
 
       <header style={{ marginBottom: 40 }}>
@@ -74,7 +75,7 @@ export default function ArticleDetail() {
 
       {article.audio_url && (
         <audio controls style={{ width: '100%', marginBottom: 24 }}>
-          <source src={article.audio_url} />
+          <source src={article.audio_url} type="audio/mpeg" />
           Votre navigateur ne supporte pas la lecture audio.
         </audio>
       )}
@@ -88,7 +89,15 @@ export default function ArticleDetail() {
       <div style={{ marginTop: 48, paddingTop: 24, borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 12 }}>
         <span style={{ fontSize: 'var(--text-base)', color: 'var(--ink-faint)' }}>Partager :</span>
         <button
-          onClick={() => navigator.clipboard.writeText(window.location.href).then(() => notify('Lien copié !'))}
+          onClick={() => {
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(window.location.href)
+                .then(() => notify('Lien copié !'))
+                .catch(() => notify('Impossible de copier le lien.', 'error'));
+            } else {
+              notify('Votre navigateur ne supporte pas cette fonction.', 'error');
+            }
+          }}
           style={{
             background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 6,
             padding: '8px 16px', fontSize: 'var(--text-base)', fontFamily: 'var(--ui)',

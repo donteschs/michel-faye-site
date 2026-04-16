@@ -18,11 +18,15 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     supabase.from('articles').select('*').eq('status', 'published').order('date', { ascending: false })
-      .then(({ data }) => { setArticles(data || []); setLoading(false); });
+      .then(({ data }) => {
+        if (!cancelled) { setArticles(data || []); setLoading(false); }
+      });
+    return () => { cancelled = true; };
   }, []);
 
-  const important = articles.filter(a => a.important);
+  const important = articles.filter(a => a.important).slice(0, 3);
   const latest = articles.slice(0, 4);
 
   return (
@@ -71,6 +75,10 @@ export default function Home() {
               <div
                 key={article.id}
                 onClick={() => navigate('article', article)}
+                onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && navigate('article', article)}
+                tabIndex={0}
+                role="button"
+                aria-label={`Lire l'article : ${article.title}`}
                 style={{
                   borderLeft: '4px solid var(--gold)',
                   background: 'var(--white)',
