@@ -3,7 +3,7 @@
 :root {
   --cream: #FFFBEB; --cream-dark: #F5EDE0; --ink: #2C1810;
   --ink-light: #57534E; --ink-faint: #78716C;
-  --gold: #C4955A; --gold-light: #F5EDE0;
+  --gold: #C4955A; --gold-light: #FAF0DC;
   --blue: #4A6FA5; --blue-light: #E8EFF8; --blue-deep: #2D4A7A;
   --rose: #B85C5C; --rose-light: #FDECEA;
   --white: #FFFFFF; --border: #E8DDD4;
@@ -14,17 +14,22 @@
   --text-lg: 20px; --text-xl: 24px; --text-2xl: 32px;
   --text-3xl: 42px; --text-4xl: 52px;
   --leading-tight: 1.2; --leading-normal: 1.6; --leading-relaxed: 1.85;
-  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: color, background-color, border-color, box-shadow, opacity, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-transform: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --shadow-sm: 0 1px 3px rgba(44,36,32,0.06);
   --shadow-md: 0 4px 16px rgba(44,36,32,0.08);
   --shadow-lg: 0 8px 32px rgba(44,36,32,0.10);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--cream); color: var(--ink); font-family: var(--body); font-size: var(--text-base); line-height: var(--leading-relaxed); -webkit-font-smoothing: antialiased; }
-h1, h2, h3, h4 { font-family: var(--serif); line-height: var(--leading-tight); }
+body { background: var(--cream); color: var(--ink); font-family: var(--body); font-size: var(--text-base); line-height: var(--leading-relaxed); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+h1, h2, h3, h4, h5, h6 { font-family: var(--serif); line-height: var(--leading-tight); }
 a { color: var(--blue); text-decoration: none; }
 a:hover { color: var(--blue-deep); }
 button { font-family: var(--ui); cursor: pointer; border: none; background: none; }
 input, textarea, select { font-family: var(--body); font-size: var(--text-base); }
 img { max-width: 100%; height: auto; display: block; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
