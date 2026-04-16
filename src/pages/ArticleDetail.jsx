@@ -1,6 +1,7 @@
 import DOMPurify from 'dompurify';
 import { useApp } from '../App';
 import { Badge } from '../components/ui';
+import CommentSection from '../components/public/CommentSection';
 
 const CATEGORY_PRESET = { Journal: 'gold', Histoire: 'blue', Livre: 'neutral' };
 
@@ -110,9 +111,7 @@ export default function ArticleDetail() {
         </button>
       </div>
 
-      <div style={{ marginTop: 48 }}>
-        <p style={{ color: 'var(--ink-faint)', fontSize: 'var(--text-base)' }}>Commentaires — disponible bientôt</p>
-      </div>
+      <CommentSection articleId={article.id} />
     </div>
   );
 }
