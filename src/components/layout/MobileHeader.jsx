@@ -1,1 +1,1 @@
-export default function MobileHeader() { return null; }
+export default function MobileHeader({ open, onToggle }) { return null; }

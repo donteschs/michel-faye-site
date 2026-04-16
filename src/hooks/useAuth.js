@@ -5,12 +5,14 @@ export function useAuth() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
+    let ignore = false;
+    supabase.auth.getSession()
+      .then(({ data: { session } }) => { if (!ignore) setUser(session?.user ?? null); })
+      .finally(() => { if (!ignore) setLoading(false); });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+      if (!ignore) setUser(session?.user ?? null);
     });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => setUser(session?.user ?? null));
-    return () => subscription.unsubscribe();
+    return () => { ignore = true; subscription.unsubscribe(); };
   }, []);
   return {
     user, loading,
