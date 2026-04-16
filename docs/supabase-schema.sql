@@ -36,6 +36,22 @@ create table if not exists comment_likes (
   unique(comment_id, user_id)
 );
 
+-- Trigger: keep comments.likes_count in sync with comment_likes table
+create or replace function update_likes_count() returns trigger as $$
+begin
+  if TG_OP = 'INSERT' then
+    update comments set likes_count = likes_count + 1 where id = NEW.comment_id;
+  elsif TG_OP = 'DELETE' then
+    update comments set likes_count = likes_count - 1 where id = OLD.comment_id;
+  end if;
+  return null;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists on_like_change on comment_likes;
+create trigger on_like_change after insert or delete on comment_likes
+  for each row execute function update_likes_count();
+
 -- Auto-create profile on signup
 create or replace function handle_new_user() returns trigger as $$
 begin insert into profiles (id, email) values (new.id, new.email); return new; end;
@@ -46,6 +62,8 @@ create trigger on_auth_user_created after insert on auth.users
   for each row execute function handle_new_user();
 
 -- RLS
+-- Note: multiple SELECT policies on same table use OR logic in PostgreSQL.
+-- Visitors match "publié lisible" (published only); admin matches "admin tout" (all rows incl. drafts).
 alter table articles enable row level security;
 create policy "publié lisible" on articles for select using (status='published');
 create policy "admin tout" on articles for all using (auth.jwt()->>'email'='michele.fay@sfr.fr');
