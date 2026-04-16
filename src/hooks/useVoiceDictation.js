@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 
 export function useVoiceDictation(onTranscript) {
   const [listening, setListening] = useState(false);
@@ -7,6 +7,10 @@ export function useVoiceDictation(onTranscript) {
     ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
   );
   const recogRef = useRef(null);
+
+  useEffect(() => {
+    return () => { recogRef.current?.stop(); };
+  }, []);
 
   const start = useCallback(() => {
     if (!supported) return;

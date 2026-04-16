@@ -52,7 +52,7 @@ export default function AdminEditor() {
     audio_url: audioUrl,
   }), [title, editor, category, tags, important, imageUrl, audioUrl]);
 
-  const { lastSaved, saving, saveNow } = useAutoSave(existing?.id || null, getData);
+  const { lastSaved, saving, saveError, saveNow } = useAutoSave(existing?.id || null, getData);
 
   const handleVoiceTranscript = useCallback((text) => {
     if (editor) editor.commands.insertContent(text + ' ');
@@ -92,7 +92,9 @@ export default function AdminEditor() {
     }
   };
 
-  const saveIndicator = saving
+  const saveIndicator = saveError
+    ? `⚠ ${saveError}`
+    : saving
     ? 'Sauvegarde…'
     : lastSaved
     ? `Sauvegardé à ${lastSaved.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}`

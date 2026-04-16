@@ -1,12 +1,21 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { openai, AI_PROMPTS } from '../lib/openai';
 
 export function useAIAssistant() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const abortRef = useRef(null);
 
-  const run = async (key, content) => {
+  useEffect(() => {
+    return () => abortRef.current?.abort();
+  }, []);
+
+  const run = useCallback(async (key, content) => {
     if (!content.trim()) return null;
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setLoading(true);
     setError(null);
     try {
@@ -19,14 +28,16 @@ export function useAIAssistant() {
           { role: 'user', content },
         ],
       });
+      if (controller.signal.aborted) return null;
       return res.choices[0].message.content.trim();
     } catch (e) {
+      if (controller.signal.aborted) return null;
       setError(e.message || 'Erreur OpenAI');
       return null;
     } finally {
-      setLoading(false);
+      if (!controller.signal.aborted) setLoading(false);
     }
-  };
+  }, []);
 
   return { run, loading, error };
 }
