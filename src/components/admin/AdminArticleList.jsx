@@ -5,21 +5,25 @@ import { Badge, Button } from '../ui';
 
 export default function AdminArticleList({ articles, onRefresh }) {
   const { navigate } = useApp();
-  const [actionId, setActionId] = useState(null); // which article is loading
+  const [loadingIds, setLoadingIds] = useState(new Set());
+  const setRowLoading = (id, on) =>
+    setLoadingIds(prev => { const next = new Set(prev); on ? next.add(id) : next.delete(id); return next; });
 
   const toggleStatus = async (article) => {
-    setActionId(article.id);
+    setRowLoading(article.id, true);
     const newStatus = article.status === 'published' ? 'draft' : 'published';
-    await supabase.from('articles').update({ status: newStatus }).eq('id', article.id);
-    setActionId(null);
+    const { error } = await supabase.from('articles').update({ status: newStatus }).eq('id', article.id);
+    setRowLoading(article.id, false);
+    if (error) { console.error('Mise à jour échouée :', error.message); return; }
     onRefresh();
   };
 
   const deleteArticle = async (article) => {
     if (!window.confirm(`Supprimer "${article.title}" ?`)) return;
-    setActionId(article.id);
-    await supabase.from('articles').delete().eq('id', article.id);
-    setActionId(null);
+    setRowLoading(article.id, true);
+    const { error } = await supabase.from('articles').delete().eq('id', article.id);
+    setRowLoading(article.id, false);
+    if (error) { console.error('Suppression échouée :', error.message); return; }
     onRefresh();
   };
 
@@ -37,7 +41,7 @@ export default function AdminArticleList({ articles, onRefresh }) {
         const dateStr = a.date
           ? new Intl.DateTimeFormat('fr-FR', { day:'numeric', month:'short', year:'numeric' }).format(new Date(a.date))
           : '';
-        const isLoading = actionId === a.id;
+        const isLoading = loadingIds.has(a.id);
         return (
           <div
             key={a.id}

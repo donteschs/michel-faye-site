@@ -9,15 +9,20 @@ export default function AdminDashboard() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchArticles = useCallback(async () => {
+  const fetchArticles = useCallback(async (signal) => {
     setLoading(true);
-    let cancelled = false;
     const { data } = await supabase.from('articles').select('*').order('created_at', { ascending: false });
-    if (!cancelled) { setArticles(data || []); setLoading(false); }
-    return () => { cancelled = true; };
+    if (signal?.aborted) return;
+    setArticles(data || []);
+    setLoading(false);
   }, []);
 
-  useEffect(() => { fetchArticles(); }, [fetchArticles]);
+  useEffect(() => {
+    if (!isAdmin) return;
+    const controller = new AbortController();
+    fetchArticles(controller.signal);
+    return () => controller.abort();
+  }, [isAdmin, fetchArticles]);
 
   if (!isAdmin) return null;
 
