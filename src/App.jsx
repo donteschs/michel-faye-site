@@ -1,4 +1,4 @@
-import { useState, createContext, useContext } from 'react';
+import { useState, useEffect, createContext, useContext } from 'react';
 import { useAuth } from './hooks/useAuth';
 import Sidebar from './components/layout/Sidebar';
 import MobileHeader from './components/layout/MobileHeader';
@@ -15,21 +15,60 @@ import AdminEditor from './pages/admin/AdminEditor';
 export const AppContext = createContext(null);
 export const useApp = () => useContext(AppContext);
 
+const PATH_TO_PAGE = {
+  '/':        'home',
+  '/articles': 'articles',
+  '/about':   'about',
+  '/contact': 'contact',
+  '/login':   'login',
+  '/admin':   'admin',
+  '/editor':  'editor',
+};
+
+const PAGE_TO_PATH = {
+  home:     '/',
+  articles: '/articles',
+  about:    '/about',
+  contact:  '/contact',
+  login:    '/login',
+  admin:    '/admin',
+  editor:   '/editor',
+  article:  '/articles',
+};
+
+function pathToPage(pathname) {
+  return PATH_TO_PAGE[pathname] || 'home';
+}
+
 export default function App() {
   const auth = useAuth();
-  const [page, setPage] = useState('home');
+  const [page, setPage] = useState(() => pathToPage(window.location.pathname));
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [editArticle, setEditArticle] = useState(null);
+  const [navData, setNavData] = useState(null);
   const [mobNavOpen, setMobNavOpen] = useState(false);
   const [toast, setToast] = useState(null);
 
+  // Sync URL → page on browser back/forward
+  useEffect(() => {
+    const onPop = () => setPage(pathToPage(window.location.pathname));
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
   const navigate = (to, data = null) => {
+    const path = PAGE_TO_PATH[to] || '/';
+    if (window.location.pathname !== path) {
+      window.history.pushState({}, '', path);
+    }
     setPage(to);
+    setNavData(data);
     setMobNavOpen(false);
     if (to === 'article') setSelectedArticle(data);
     if (to === 'editor') setEditArticle(data);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
   const notify = (message, type = 'success') => setToast({ message, type });
 
   const renderPage = () => {
@@ -48,7 +87,7 @@ export default function App() {
   };
 
   return (
-    <AppContext.Provider value={{ ...auth, page, navigate, selectedArticle, editArticle, notify }}>
+    <AppContext.Provider value={{ ...auth, page, navigate, navData, selectedArticle, editArticle, notify }}>
       <div style={{ display:'flex', minHeight:'100dvh', background:'var(--cream)' }}>
         <Sidebar />
         <MobileHeader open={mobNavOpen} onToggle={() => setMobNavOpen(o => !o)} />
@@ -57,7 +96,13 @@ export default function App() {
         </main>
       </div>
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-      <style>{`@media(max-width:768px){.main-content{margin-left:0!important;padding-top:64px}}`}</style>
+      <style>{`
+        @media(max-width:768px){.main-content{margin-left:0!important;padding-top:64px}}
+        @media(max-width:1100px){.articles-grid{grid-template-columns:repeat(3,1fr)!important}}
+        @media(max-width:768px){.articles-grid{grid-template-columns:repeat(2,1fr)!important}}
+        .articles-grid{align-items:stretch}
+        .articles-grid>*{height:100%}
+      `}</style>
     </AppContext.Provider>
   );
 }

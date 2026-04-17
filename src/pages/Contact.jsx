@@ -40,7 +40,7 @@ export default function Contact() {
         lineHeight: 1.8,
         marginBottom: 36,
       }}>
-        Vous souhaitez laisser un message à Michelle Faye ? N'hésitez pas à écrire.
+        Vous souhaitez laisser un message à Michel Faye ? N'hésitez pas à écrire.
       </p>
 
       <form onSubmit={handleSubmit} noValidate>

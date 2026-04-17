@@ -39,7 +39,7 @@ export default function About() {
         lineHeight: 1.8,
         marginBottom: 32,
       }}>
-        Michelle Faye consacre son écriture à préserver les fragments du temps vécu — souvenirs d'enfance, histoires familiales et reflets d'une époque révolue. Sa démarche est celle d'une femme convaincue que les mots sont le seul antidote à l'oubli. À travers ses récits, elle tisse un pont entre les générations pour que rien d'essentiel ne se perde.
+        Michel Faye consacre son écriture à préserver les fragments du temps vécu — souvenirs d'enfance, histoires familiales et reflets d'une époque révolue. Sa démarche est celle d'une femme convaincue que les mots sont le seul antidote à l'oubli. À travers ses récits, elle tisse un pont entre les générations pour que rien d'essentiel ne se perde.
       </p>
 
       {/* Gold citation blockquote */}
@@ -74,7 +74,7 @@ export default function About() {
         lineHeight: 1.8,
         marginBottom: 40,
       }}>
-        Chaque jour, Michelle Faye prend la plume pour capturer ce que la mémoire risque de laisser glisser entre ses doigts. Cette discipline quotidienne est pour elle un acte d'amour envers les siens et envers elle-même.
+        Chaque jour, Michel Faye prend la plume pour capturer ce que la mémoire risque de laisser glisser entre ses doigts. Cette discipline quotidienne est pour elle un acte d'amour envers les siens et envers elle-même.
       </p>
 
       {/* Section 2 */}
@@ -92,7 +92,7 @@ export default function About() {
         color: 'var(--ink)',
         lineHeight: 1.8,
       }}>
-        Les textes de Michelle Faye ne sont pas seulement des souvenirs — ils sont un legs vivant destiné aux enfants, aux petits-enfants, à tous ceux qui chercheront un jour à comprendre d'où ils viennent. Écrire, pour elle, c'est offrir aux générations futures la matière même de leur identité.
+        Les textes de Michel Faye ne sont pas seulement des souvenirs — ils sont un legs vivant destiné aux enfants, aux petits-enfants, à tous ceux qui chercheront un jour à comprendre d'où ils viennent. Écrire, pour elle, c'est offrir aux générations futures la matière même de leur identité.
       </p>
     </div>
   );

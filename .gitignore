@@ -1,2 +1,8 @@
 .env.local
+.env
 .superpowers/
+.DS_Store
+.playwright-mcp/
+.remember/
+dist/
+node_modules/

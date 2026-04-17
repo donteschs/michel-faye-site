@@ -51,7 +51,7 @@ export default function MobileHeader({ open, onToggle }) {
           style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
         >
           <span style={{ fontFamily: 'var(--serif)', fontSize: 18, color: 'var(--ink)', fontWeight: 600 }}>
-            Michelle <em style={{ color: 'var(--gold)', fontStyle: 'italic' }}>Faye</em>
+            Michel <em style={{ color: 'var(--gold)', fontStyle: 'italic' }}>Faye</em>
           </span>
         </button>
 

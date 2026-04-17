@@ -133,7 +133,7 @@ export default function Login() {
               id="nom"
               value={form.nom}
               onChange={set('nom')}
-              placeholder="Michelle Faye"
+              placeholder="Michel Faye"
               required
             />
           )}

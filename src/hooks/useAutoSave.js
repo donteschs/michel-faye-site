@@ -38,5 +38,5 @@ export function useAutoSave(articleId, getData, intervalMs = 30000) {
     return () => clearInterval(t);
   }, [save, intervalMs]);
 
-  return { lastSaved, saving, saveError, saveNow: save };
+  return { lastSaved, saving, saveError, saveNow: save, createdIdRef };
 }

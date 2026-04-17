@@ -52,7 +52,7 @@ export default function AdminEditor() {
     audio_url: audioUrl,
   }), [title, editor, category, tags, important, imageUrl, audioUrl]);
 
-  const { lastSaved, saving, saveError, saveNow } = useAutoSave(existing?.id || null, getData);
+  const { lastSaved, saving, saveError, saveNow, createdIdRef } = useAutoSave(existing?.id || null, getData);
 
   const handleVoiceTranscript = useCallback((text) => {
     if (editor) editor.commands.insertContent(text + ' ');
@@ -74,10 +74,10 @@ export default function AdminEditor() {
   const publish = async (status) => {
     setPublishing(true);
     try {
-      const data = getData();
-      data.status = status;
-      if (existing?.id) {
-        const { error } = await supabase.from('articles').update({ ...data, updated_at: new Date().toISOString() }).eq('id', existing.id);
+      const data = { ...getData(), status, updated_at: new Date().toISOString() };
+      const effectiveId = existing?.id || createdIdRef.current;
+      if (effectiveId) {
+        const { error } = await supabase.from('articles').update(data).eq('id', effectiveId);
         if (error) throw error;
       } else {
         const { error } = await supabase.from('articles').insert(data);
@@ -103,11 +103,13 @@ export default function AdminEditor() {
   return (
     <>
       <style>{`
-        .tiptap-editor h2 { font-family: var(--serif); font-size: var(--text-xl); margin: 28px 0 12px; }
-        .tiptap-editor h3 { font-family: var(--serif); font-size: var(--text-lg); margin: 20px 0 10px; }
-        .tiptap-editor p { margin-bottom: 14px; }
-        .tiptap-editor blockquote { border-left: 3px solid var(--gold); padding-left: 16px; color: var(--ink-light); font-style: italic; margin: 20px 0; }
-        .tiptap-editor ul, .tiptap-editor ol { padding-left: 24px; margin-bottom: 14px; }
+        .tiptap-editor h2 { font-family: var(--serif); font-size: var(--text-xl); margin: 2em 0 0.5em; color: var(--ink); }
+        .tiptap-editor h3 { font-family: var(--serif); font-size: var(--text-lg); margin: 1.6em 0 0.4em; color: var(--ink); }
+        .tiptap-editor p { margin: 0 0 1.4em 0; line-height: 1.85; }
+        .tiptap-editor p:last-child { margin-bottom: 0; }
+        .tiptap-editor blockquote { border-left: 3px solid var(--gold); padding: 4px 0 4px 20px; color: var(--ink-light); font-style: italic; margin: 1.6em 0; }
+        .tiptap-editor ul, .tiptap-editor ol { padding-left: 1.5em; margin-bottom: 1.4em; }
+        .tiptap-editor li { margin-bottom: 0.3em; }
         .tiptap-editor a { color: var(--blue); text-decoration: underline; }
         .tiptap-editor p.is-editor-empty:first-child::before { content: attr(data-placeholder); color: var(--ink-faint); pointer-events: none; float: left; height: 0; }
         .tiptap-editor:focus { outline: none; }

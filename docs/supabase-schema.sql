@@ -1,3 +1,9 @@
+-- Drop existing tables if they exist (run this first if re-migrating)
+-- drop table if exists comment_likes cascade;
+-- drop table if exists comments cascade;
+-- drop table if exists articles cascade;
+-- drop table if exists profiles cascade;
+
 -- Tables
 create table if not exists articles (
   id uuid primary key default gen_random_uuid(),

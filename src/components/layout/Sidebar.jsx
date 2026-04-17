@@ -108,7 +108,7 @@ export default function Sidebar() {
           }}
         >
           <div style={{ fontFamily: 'var(--serif)', fontSize: 22, color: 'var(--ink)', fontWeight: 600, lineHeight: 1.2 }}>
-            Michelle{' '}
+            Michel{' '}
             <em style={{ color: 'var(--gold)', fontStyle: 'italic' }}>Faye</em>
           </div>
           <div style={{ fontFamily: 'var(--ui)', fontSize: 'var(--text-xs)', color: 'var(--ink-faint)', marginTop: 4, letterSpacing: '0.05em' }}>
@@ -209,10 +209,34 @@ export default function Sidebar() {
 
           {isAdmin && (
             <>
-              <button onClick={() => navigate('editor')} style={{ display: 'block', marginTop: 8, width: '100%', padding: '7px 12px', background: 'var(--gold)', color: '#fff', border: 'none', borderRadius: 5, fontFamily: 'var(--ui)', fontSize: 'var(--text-sm)', fontWeight: 600, cursor: 'pointer', textAlign: 'center' }}>
-                Publier
-              </button>
-              <button onClick={signOut} style={{ display: 'block', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', fontFamily: 'var(--ui)', fontSize: 'var(--text-sm)', padding: '5px 0', width: '100%', textAlign: 'left', marginTop: 4 }}>
+              <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <button
+                  onClick={() => navigate('admin')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    width: '100%', padding: '8px 12px',
+                    background: page === 'admin' ? 'rgba(196,149,90,0.15)' : 'var(--white)',
+                    border: '1px solid var(--border)', borderRadius: 6,
+                    fontFamily: 'var(--ui)', fontSize: 'var(--text-sm)',
+                    color: 'var(--ink)', cursor: 'pointer', fontWeight: 500,
+                  }}
+                >
+                  <span>📋</span> Mes publications
+                </button>
+                <button
+                  onClick={() => navigate('editor', null)}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    width: '100%', padding: '8px 12px',
+                    background: 'var(--gold)', border: 'none', borderRadius: 6,
+                    fontFamily: 'var(--ui)', fontSize: 'var(--text-sm)',
+                    color: '#fff', cursor: 'pointer', fontWeight: 600,
+                  }}
+                >
+                  + Nouvel écrit
+                </button>
+              </div>
+              <button onClick={signOut} style={{ display: 'block', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', fontFamily: 'var(--ui)', fontSize: 'var(--text-sm)', padding: '5px 0', width: '100%', textAlign: 'left', marginTop: 6 }}>
                 Déconnexion
               </button>
             </>
@@ -224,11 +248,6 @@ export default function Sidebar() {
             </button>
           )}
 
-          {!isAuthenticated && (
-            <button onClick={() => navigate('login')} style={{ display: 'block', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--ink-faint)', fontFamily: 'var(--ui)', fontSize: 'var(--text-sm)', padding: '5px 0', width: '100%', textAlign: 'left', marginTop: 4 }}>
-              Espace admin
-            </button>
-          )}
         </div>
       </nav>
     </>
