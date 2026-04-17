@@ -224,6 +224,19 @@ export default function Sidebar() {
                   <span>📋</span> Mes publications
                 </button>
                 <button
+                  onClick={() => navigate('settings')}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    width: '100%', padding: '8px 12px',
+                    background: page === 'settings' ? 'rgba(196,149,90,0.15)' : 'var(--white)',
+                    border: '1px solid var(--border)', borderRadius: 6,
+                    fontFamily: 'var(--ui)', fontSize: 'var(--text-sm)',
+                    color: 'var(--ink)', cursor: 'pointer', fontWeight: 500,
+                  }}
+                >
+                  <span>⚙️</span> Paramètres
+                </button>
+                <button
                   onClick={() => navigate('editor', null)}
                   style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,

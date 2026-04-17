@@ -6,3 +6,4 @@
 .remember/
 dist/
 node_modules/
+.vercel

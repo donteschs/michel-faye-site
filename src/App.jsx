@@ -11,6 +11,7 @@ import Contact from './pages/Contact';
 import Login from './pages/Login';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminEditor from './pages/admin/AdminEditor';
+import AdminSettings from './pages/admin/AdminSettings';
 
 export const AppContext = createContext(null);
 export const useApp = () => useContext(AppContext);
@@ -82,6 +83,7 @@ export default function App() {
       case 'login':    return <Login />;
       case 'admin':    return auth.isAdmin ? <AdminDashboard /> : <Login />;
       case 'editor':   return auth.isAdmin ? <AdminEditor /> : <Login />;
+      case 'settings': return auth.isAdmin ? <AdminSettings /> : <Login />;
       default:         return <Home />;
     }
   };
